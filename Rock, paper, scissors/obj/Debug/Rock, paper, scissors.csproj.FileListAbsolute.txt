@@ -1,0 +1,10 @@
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe.config
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.pdb
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csprojAssemblyReference.cache
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Form1.resources
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Properties.Resources.resources
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.GenerateResource.cache
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
+C:\Users\demet\Source\Repos\deda1993a\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
