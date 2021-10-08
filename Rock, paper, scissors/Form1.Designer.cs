@@ -55,16 +55,16 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(24, 83);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(185, 167);
+            this.pictureBox1.Size = new System.Drawing.Size(202, 167);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(262, 83);
+            this.pictureBox2.Location = new System.Drawing.Point(270, 83);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(185, 167);
+            this.pictureBox2.Size = new System.Drawing.Size(477, 301);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;

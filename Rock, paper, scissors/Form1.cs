@@ -26,7 +26,9 @@ namespace Rock__paper__scissors
                 Bitmap GImage = new Bitmap(openFileDialog1.FileName);
                 pictureBox1.Image = OgImage;
 
-               Grayscale(GImage);
+                Frame(GImage);
+
+                Grayscale(GImage);
             }
         }
 
@@ -48,6 +50,19 @@ namespace Rock__paper__scissors
                     pic.SetPixel(i, j, Color.FromArgb(a, CValue, CValue, CValue));
 
                     pictureBox2.Image = pic;
+                }
+            }
+        }
+
+        private void Frame(Bitmap pic)
+        {
+            for (int i = 0; i < pic.Width; i++)
+            {
+                for (int j = 0; j < pic.Height; j++)
+                {
+                    if (i==0 || j==0 || i==pic.Width-1 || j==pic.Height-1) {
+                        pic.SetPixel(i, j, Color.Black);
+                    }
                 }
             }
         }
