@@ -28,3 +28,13 @@ C:\Users\demet\Source\Repos\Rock-paper-scissors2\Rock, paper, scissors\obj\Debug
 C:\Users\demet\Source\Repos\Rock-paper-scissors2\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
 C:\Users\demet\Source\Repos\Rock-paper-scissors2\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
 C:\Users\demet\Source\Repos\Rock-paper-scissors2\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe.config
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.pdb
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csprojAssemblyReference.cache
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Form1.resources
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Properties.Resources.resources
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.GenerateResource.cache
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
+C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
