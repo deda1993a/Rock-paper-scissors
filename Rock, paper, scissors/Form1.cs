@@ -12,6 +12,8 @@ namespace Rock__paper__scissors
 {
     public partial class Form1 : Form
     {
+        Bitmap OgImage;
+        Bitmap GImage;
         public Form1()
         {
             InitializeComponent();
@@ -22,8 +24,8 @@ namespace Rock__paper__scissors
         {
             if (openFileDialog1.ShowDialog()==DialogResult.OK)
             {
-                Bitmap OgImage = new Bitmap(openFileDialog1.FileName);
-                Bitmap GImage = new Bitmap(openFileDialog1.FileName);
+                OgImage = new Bitmap(openFileDialog1.FileName);
+                GImage = new Bitmap(openFileDialog1.FileName);
                 pictureBox1.Image = OgImage;
 
                 Frame(GImage);
@@ -67,5 +69,43 @@ namespace Rock__paper__scissors
             }
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void Threshold(Bitmap pic)
+        {
+            int x, y;
+
+            int T = Convert.ToInt32(threshold1.Value);
+            Bitmap temp = (Bitmap)pic.Clone();
+
+            for (x = 0; x < temp.Width; x++)
+            {
+                //Console.WriteLine();
+                for (y = 0; y < temp.Height; y++)
+                {
+                    Color pixelColor = temp.GetPixel(x, y);
+                    Color black = Color.FromArgb(0, 0, 0);
+                    Color white = Color.FromArgb(255, 255, 255);
+                    //Console.Write(((pixelColor.R + pixelColor.G + pixelColor.B))/ 3 + " ");
+                    if (((pixelColor.R + pixelColor.G + pixelColor.B)) / 3 < T)
+                    {
+                        temp.SetPixel(x, y, black);
+                    }
+                    else
+                    {
+                        temp.SetPixel(x, y, white);
+                    }
+                }
+            }
+            pictureBox2.Image = temp;
+        }
+
+        private void threshold1_Scroll(object sender, EventArgs e)
+        {
+            Threshold(GImage);
+        }
     }
 }
