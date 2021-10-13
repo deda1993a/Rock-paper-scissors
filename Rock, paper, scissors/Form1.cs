@@ -92,11 +92,11 @@ namespace Rock__paper__scissors
                     //Console.Write(((pixelColor.R + pixelColor.G + pixelColor.B))/ 3 + " ");
                     if (((pixelColor.R + pixelColor.G + pixelColor.B)) / 3 < T)
                     {
-                        temp.SetPixel(x, y, white);
+                        temp.SetPixel(x, y, black);
                     }
                     else
                     {
-                        temp.SetPixel(x, y, black);
+                        temp.SetPixel(x, y, white);
                     }
                 }
             }
