@@ -38,3 +38,13 @@ C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock,
 C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
 C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
 C:\Users\donov\Desktop\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe.config
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.pdb
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csprojAssemblyReference.cache
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Properties.Resources.resources
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.GenerateResource.cache
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Point.resources
