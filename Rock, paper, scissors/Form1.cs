@@ -10,16 +10,6 @@ using System.Windows.Forms;
 
 namespace Rock__paper__scissors
 {
-
-    public class Point
-    {
-        public int x, y;
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
     public partial class Form1 : Form
     {
         Bitmap OgImage;
@@ -231,6 +221,15 @@ namespace Rock__paper__scissors
 
             pictureBox2.Image = temp;
 
+        }
+    }
+    public class Point
+    {
+        public int x, y;
+        public Point(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
         }
     }
 }

@@ -47,4 +47,4 @@ C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\De
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.CoreCompileInputs.cache
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
-C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Point.resources
+C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Form1.resources
