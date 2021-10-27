@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Rock__paper__scissors
@@ -14,6 +14,7 @@ namespace Rock__paper__scissors
     {
         Bitmap OgImage;
         Bitmap GImage;
+        Bitmap TImage;
         public Form1()
         {
             InitializeComponent();
@@ -28,9 +29,60 @@ namespace Rock__paper__scissors
                 GImage = new Bitmap(openFileDialog1.FileName);
                 pictureBox1.Image = OgImage;
 
+                Crop(OgImage);
+                Crop(GImage);
+
                 Frame(GImage);
 
                 Grayscale(GImage);
+                Threshold(GImage, 100);
+                AutomaticThreshold(GImage,TImage,threshold1.Value);
+            }
+        }
+
+        private void Crop(Bitmap b)
+        {
+            Bitmap nb = new Bitmap(b.Width, b.Height);
+            using (Graphics g = Graphics.FromImage(nb))
+            {
+                g.DrawImage(b, -10, 0);
+                GImage = nb;
+            }
+        }
+
+        private void AutomaticThreshold(Bitmap pic, Bitmap tpic, int fixval)
+        {
+            //Scan image for white pixel percentage
+            int x, y;
+            Bitmap temp = (Bitmap)tpic.Clone();
+            float whitePixels = 0;
+            float blackPixels = 0;
+            int fixValue = fixval;
+            for (x = 0; x < temp.Width; x++)
+            {
+                for (y = 0; y < temp.Height; y++)
+                {
+                    Color pixelColor = temp.GetPixel(x, y);
+                    Color black = Color.FromArgb(0, 0, 0);
+                    Color white = Color.FromArgb(255, 255, 255);
+                    if (pixelColor == white)
+                    {
+                        whitePixels++;
+                    }
+                    else if (pixelColor == black)
+                    {
+                        blackPixels++;
+                    }
+                }
+            }
+            //Console.WriteLine("White pixels: " + whitePixels);
+            //Console.WriteLine("Black pixels: " + blackPixels);
+            Threshold(GImage, fixValue);
+            Console.WriteLine("Fehér pixelek százaléka: " +  whitePixels / (blackPixels + whitePixels) * 100);
+            if (whitePixels/(blackPixels+whitePixels)*100 > 35)
+            {
+                fixValue++;
+                AutomaticThreshold(OgImage, TImage, fixValue);
             }
         }
 
@@ -73,7 +125,39 @@ namespace Rock__paper__scissors
         {
 
         }
-        
+
+        private void Threshold(Bitmap pic, int value)
+        {
+            int x, y;
+
+            int T = value;
+            Bitmap temp = (Bitmap)pic.Clone();
+
+            for (x = 0; x < temp.Width; x++)
+            {
+                //Console.WriteLine();
+                for (y = 0; y < temp.Height; y++)
+                {
+                    Color pixelColor = temp.GetPixel(x, y);
+                    Color black = Color.FromArgb(0, 0, 0);
+                    Color white = Color.FromArgb(255, 255, 255);
+                    //Console.Write(((pixelColor.R + pixelColor.G + pixelColor.B))/ 3 + " ");
+                    if (((pixelColor.R + pixelColor.G + pixelColor.B)) / 3 < T)
+                    {
+                        temp.SetPixel(x, y, black);
+                    }
+                    else
+                    {
+                        temp.SetPixel(x, y, white);
+                    }
+                }
+            }
+            pictureBox2.Image = temp;
+            threshold1.Value = value;
+            TImage = temp;
+            convexHull(temp);
+        }
+
         private void Threshold(Bitmap pic)
         {
             int x, y;
@@ -101,6 +185,7 @@ namespace Rock__paper__scissors
                 }
             }
             pictureBox2.Image = temp;
+            TImage = temp;
             convexHull(temp);
         }
 
@@ -197,13 +282,13 @@ namespace Rock__paper__scissors
                                   // point
 
                 // Print Result
-                foreach (Point tempp in hull)
+                /*foreach (Point tempp in hull)
                     Console.WriteLine("(" + tempp.x + ", " +
                                         tempp.y + ")");
 
             Console.WriteLine();
             Console.WriteLine("-----------------");
-            Console.WriteLine();
+            Console.WriteLine();*/
 
             Pen redPen = new Pen(Color.Red, 3);
 
@@ -220,6 +305,11 @@ namespace Rock__paper__scissors
             }
 
             pictureBox2.Image = temp;
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
     }
