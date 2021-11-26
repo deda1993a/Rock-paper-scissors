@@ -48,3 +48,12 @@ C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\De
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
 C:\Users\donov\Documents\GitHub\Rock-paper-scissors\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Form1.resources
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe.config
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.exe
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\bin\Debug\Rock, paper, scissors.pdb
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csprojAssemblyReference.cache
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Form1.resources
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock__paper__scissors.Properties.Resources.resources
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.csproj.GenerateResource.cache
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.exe
+C:\Users\demet\Source\Repos\Rock-paper-scissors6\Rock, paper, scissors\obj\Debug\Rock, paper, scissors.pdb
