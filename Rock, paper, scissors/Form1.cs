@@ -10,11 +10,13 @@ using System.Windows.Forms;
 
 namespace Rock__paper__scissors
 {
+
     public partial class Form1 : Form
     {
         Bitmap OgImage;
         Bitmap GImage;
         Bitmap TImage;
+        Bitmap Check;
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +27,7 @@ namespace Rock__paper__scissors
         {
             if (openFileDialog1.ShowDialog()==DialogResult.OK)
             {
+                label1.Text = "";
                 OgImage = new Bitmap(openFileDialog1.FileName);
                 GImage = new Bitmap(openFileDialog1.FileName);
                 pictureBox1.Image = OgImage;
@@ -37,9 +40,71 @@ namespace Rock__paper__scissors
                 Grayscale(GImage);
                 Threshold(GImage, 100);
                 AutomaticThreshold(GImage,TImage,threshold1.Value);
+
+                Check = new Bitmap(pictureBox2.Image);
+                CheckImage(Check);
+                Evaluate();
+
             }
         }
 
+        private void Evaluate()
+        {
+            if (blackpercent > 33)
+            {
+                label1.Text = "Olló";
+            }
+        }
+
+        private double whitepercent;
+        private double blackpercent;
+        private void CheckImage(Bitmap G)
+        {
+            Color R = Color.FromArgb(255, 0, 0);
+            Color B = Color.FromArgb(0, 0, 0);
+            Color W = Color.FromArgb(255, 255, 255);
+            int countblack = 0;
+            int countwhite = 0;
+
+            try
+            {
+                for (int i = 0; i < G.Width; i++)
+                {
+                    for (int j = 0; j < G.Height; j++)
+                    {
+                        if (G.GetPixel(i, j) == R)
+                        {
+                            for (int z = i + 2; z < G.Height; z++)
+                            {
+                                //countblack++;
+                                if (G.GetPixel(z, j) == W)
+                                {
+                                    countwhite++;
+                                }
+
+                                else
+                                {
+                                    countblack++;
+                                }
+
+                                if (G.GetPixel(z, j) == R)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            whitepercent = (double)countwhite / (countblack + countwhite) * 100;
+            blackpercent = (double)countblack / (countblack + countwhite) * 100;
+            Console.WriteLine("Black percent: " + blackpercent);
+            Console.WriteLine("White percent: " + whitepercent);
+        }
         private void Crop(Bitmap b)
         {
             Bitmap nb = new Bitmap(b.Width, b.Height);
