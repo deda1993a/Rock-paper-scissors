@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,9 @@ namespace Rock__paper__scissors
         Bitmap GImage;
         Bitmap TImage;
         Bitmap Check;
+
+        private int talaltOllo = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -25,34 +29,51 @@ namespace Rock__paper__scissors
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog()==DialogResult.OK)
+
+            if(folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                label1.Text = "";
-                OgImage = new Bitmap(openFileDialog1.FileName);
-                GImage = new Bitmap(openFileDialog1.FileName);
-                pictureBox1.Image = OgImage;
+                
+                //openFileDialog1.InitialDirectory = folderBrowserDialog1.SelectedPath;
 
-                Crop(OgImage);
-                Crop(GImage);
+                string[] dirs = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
+                int szam = 1;
 
-                Frame(GImage);
+                foreach (string selected in dirs)
+                {
+                    
+                    Console.WriteLine("Képszáma: "+ szam);
+                    szam++;
+                    label1.Text = "";
+                    OgImage = new Bitmap(selected);
+                    GImage = new Bitmap(selected);
+                    pictureBox1.Image = OgImage;
 
-                Grayscale(GImage);
-                Threshold(GImage, 100);
-                AutomaticThreshold(GImage,TImage,threshold1.Value);
+                    Crop(OgImage);
+                    Crop(GImage);
 
-                Check = new Bitmap(pictureBox2.Image);
-                CheckImage(Check);
-                Evaluate();
+                    Frame(GImage);
+
+                    Grayscale(GImage);
+                    Threshold(GImage, 100);
+                    AutomaticThreshold(GImage, TImage, threshold1.Value);
+
+                    Check = new Bitmap(pictureBox2.Image);
+                    CheckImage(Check);
+                    Evaluate();
+
+                }
 
             }
         }
 
         private void Evaluate()
         {
+            
             if (blackpercent > 33)
             {
                 label1.Text = "Olló";
+                talaltOllo++;
+                Console.WriteLine("Talált olló: "+talaltOllo);
             }
         }
 
