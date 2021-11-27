@@ -83,6 +83,8 @@ namespace Rock__paper__scissors
                 foreach (string selected in dirs)
                 {
                     Console.WriteLine("Képszáma: " + szam);
+                    double szazalek = (double)(talaltOllo * 100) / szam;
+                    Console.WriteLine("Olló találat százaléka: "+ Math.Round(szazalek, 2)+ "%");
                     szam++;
                     label1.Text = "";
                     OgImage = new Bitmap(selected);
