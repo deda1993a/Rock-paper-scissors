@@ -104,7 +104,7 @@ namespace Rock__paper__scissors
                     Check = new Bitmap(pictureBox2.Image);
                     CheckImage(Check);
                     Evaluate();
-
+                    //pictureBox2.Image.Save(szam+".bmp");
                 }
 
             }
@@ -198,10 +198,10 @@ namespace Rock__paper__scissors
             int heightInPixels = bitmapData.Height;
             int widthInBytes = bitmapData.Width * bytesPerPixel;
 
-            for (y = 0; y < heightInPixels; y++)
+            for ( y = 0; y < heightInPixels; y++)
             {
                 int currentLine = y * bitmapData.Stride;
-                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
+                for ( x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
 
                     int oldBlue = pixels[currentLine + x];
@@ -224,7 +224,7 @@ namespace Rock__paper__scissors
             //Console.WriteLine("Fehér pixelek százaléka: " + whitePixels / (blackPixels + whitePixels) * 100);
             if (whitePixels / (blackPixels + whitePixels) * 100 > 35)
             {
-                fixValue++;
+                fixValue=fixValue+10;
                 AutomaticThreshold(OgImage, TImage, fixValue);
             }
             temp.UnlockBits(bitmapData);
