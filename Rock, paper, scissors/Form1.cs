@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Rock__paper__scissors
 {
@@ -21,6 +23,13 @@ namespace Rock__paper__scissors
 
         private int talaltOllo = 0;
 
+         
+         
+         
+         
+
+         
+
         public Form1()
         {
             InitializeComponent();
@@ -30,9 +39,42 @@ namespace Rock__paper__scissors
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if(folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                                      
+                    
+                   
+                    label1.Text = "";
+                    OgImage = new Bitmap(openFileDialog1.FileName);
+                    GImage = new Bitmap(openFileDialog1.FileName);
+                    pictureBox1.Image = OgImage;
+
+                    Crop(OgImage);
+                    Crop(GImage);
+
+                    Frame(GImage);
+
+                    Grayscale(GImage);
+                    Threshold(GImage, 100);
+
+
+
+                    AutomaticThreshold(GImage, TImage, threshold1.Value);
+                   
+                    Check = new Bitmap(pictureBox2.Image);
+                    CheckImage(Check);
+                    Evaluate();
+
                 
+
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+
                 //openFileDialog1.InitialDirectory = folderBrowserDialog1.SelectedPath;
 
                 string[] dirs = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
@@ -40,8 +82,7 @@ namespace Rock__paper__scissors
 
                 foreach (string selected in dirs)
                 {
-                    
-                    Console.WriteLine("Képszáma: "+ szam);
+                    Console.WriteLine("Képszáma: " + szam);
                     szam++;
                     label1.Text = "";
                     OgImage = new Bitmap(selected);
@@ -55,8 +96,11 @@ namespace Rock__paper__scissors
 
                     Grayscale(GImage);
                     Threshold(GImage, 100);
-                    AutomaticThreshold(GImage, TImage, threshold1.Value);
 
+
+
+                    AutomaticThreshold(GImage, TImage, threshold1.Value);
+                  
                     Check = new Bitmap(pictureBox2.Image);
                     CheckImage(Check);
                     Evaluate();
@@ -144,18 +188,31 @@ namespace Rock__paper__scissors
             float whitePixels = 0;
             float blackPixels = 0;
             int fixValue = fixval;
-            for (x = 0; x < temp.Width; x++)
+
+            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+            int byteCount = bitmapData.Stride * temp.Height;
+            byte[] pixels = new byte[byteCount];
+            IntPtr ptrFirstPixel = bitmapData.Scan0;
+            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
+            int heightInPixels = bitmapData.Height;
+            int widthInBytes = bitmapData.Width * bytesPerPixel;
+
+            for (y = 0; y < heightInPixels; y++)
             {
-                for (y = 0; y < temp.Height; y++)
+                int currentLine = y * bitmapData.Stride;
+                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
-                    Color pixelColor = temp.GetPixel(x, y);
-                    Color black = Color.FromArgb(0, 0, 0);
-                    Color white = Color.FromArgb(255, 255, 255);
-                    if (pixelColor == white)
+
+                    int oldBlue = pixels[currentLine + x];
+                    int oldGreen = pixels[currentLine + x + 1];
+                    int oldRed = pixels[currentLine + x + 2];
+
+                    if (oldBlue==255 && oldGreen==255 && oldRed==255)
                     {
                         whitePixels++;
                     }
-                    else if (pixelColor == black)
+                    else if (oldBlue == 0 && oldGreen == 0 && oldRed == 0)
                     {
                         blackPixels++;
                     }
@@ -164,34 +221,53 @@ namespace Rock__paper__scissors
             //Console.WriteLine("White pixels: " + whitePixels);
             //Console.WriteLine("Black pixels: " + blackPixels);
             Threshold(GImage, fixValue);
-            Console.WriteLine("Fehér pixelek százaléka: " +  whitePixels / (blackPixels + whitePixels) * 100);
-            if (whitePixels/(blackPixels+whitePixels)*100 > 35)
+            //Console.WriteLine("Fehér pixelek százaléka: " + whitePixels / (blackPixels + whitePixels) * 100);
+            if (whitePixels / (blackPixels + whitePixels) * 100 > 35)
             {
                 fixValue++;
                 AutomaticThreshold(OgImage, TImage, fixValue);
             }
+            temp.UnlockBits(bitmapData);
         }
 
         private void Grayscale(Bitmap pic)
         {
-            for (int i = 0; i < pic.Width; i++)
+
+            BitmapData bitmapData = pic.LockBits(new Rectangle(0, 0, pic.Width, pic.Height), ImageLockMode.ReadWrite, pic.PixelFormat);
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(pic.PixelFormat) / 8;
+            int byteCount = bitmapData.Stride * pic.Height;
+            byte[] pixels = new byte[byteCount];
+            IntPtr ptrFirstPixel = bitmapData.Scan0;
+            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
+            int heightInPixels = bitmapData.Height;
+            int widthInBytes = bitmapData.Width * bytesPerPixel;
+
+            for (int y = 0; y < heightInPixels; y++)
             {
-                for (int j = 0; j < pic.Height; j++)
+                int currentLine = y * bitmapData.Stride;
+                for (int x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
-                    Color sel = pic.GetPixel(i, j);
+                    //Color pixelColor = temp.GetPixel(x, y);
+                    //Color black = Color.FromArgb(0, 0, 0);
+                    //Color white = Color.FromArgb(255, 255, 255);
 
-                    int a = sel.A;
-                    int r = sel.R;
-                    int g = sel.G;
-                    int b = sel.B;
+                    int oldBlue = pixels[currentLine + x];
+                    int oldGreen = pixels[currentLine + x + 1];
+                    int oldRed = pixels[currentLine + x + 2];
 
-                    int CValue = (r + g + b) / 3;
+                    int CValue = (oldRed + oldGreen + oldBlue) / 3;
 
-                    pic.SetPixel(i, j, Color.FromArgb(a, CValue, CValue, CValue));
+                        pixels[currentLine + x] = (byte)CValue;
+                        pixels[currentLine + x + 1] = (byte)CValue;
+                        pixels[currentLine + x + 2] = (byte)CValue;
 
-                    pictureBox2.Image = pic;
+
                 }
             }
+
+            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
+            pic.UnlockBits(bitmapData);
+            pictureBox2.Image = pic;
         }
 
         private void Frame(Bitmap pic)
@@ -218,26 +294,48 @@ namespace Rock__paper__scissors
 
             int T = value;
             Bitmap temp = (Bitmap)pic.Clone();
+ 
 
-            for (x = 0; x < temp.Width; x++)
+            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+            int byteCount = bitmapData.Stride * temp.Height;
+            byte[] pixels = new byte[byteCount];
+            IntPtr ptrFirstPixel = bitmapData.Scan0;
+            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
+            int heightInPixels = bitmapData.Height;
+            int widthInBytes = bitmapData.Width * bytesPerPixel;
+
+            for (y = 0; y < heightInPixels; y++)
             {
-                //Console.WriteLine();
-                for (y = 0; y < temp.Height; y++)
+                int currentLine = y * bitmapData.Stride;
+                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
-                    Color pixelColor = temp.GetPixel(x, y);
-                    Color black = Color.FromArgb(0, 0, 0);
-                    Color white = Color.FromArgb(255, 255, 255);
-                    //Console.Write(((pixelColor.R + pixelColor.G + pixelColor.B))/ 3 + " ");
-                    if (((pixelColor.R + pixelColor.G + pixelColor.B)) / 3 < T)
+                    //Color pixelColor = temp.GetPixel(x, y);
+                    //Color black = Color.FromArgb(0, 0, 0);
+                    //Color white = Color.FromArgb(255, 255, 255);
+
+                    int oldBlue = pixels[currentLine + x];
+                    int oldGreen = pixels[currentLine + x + 1];
+                    int oldRed = pixels[currentLine + x + 2];
+
+                    if (((oldRed + oldGreen + oldBlue)) / 3 < T)
                     {
-                        temp.SetPixel(x, y, black);
+                        pixels[currentLine + x] = 0;
+                        pixels[currentLine + x + 1] = 0;
+                        pixels[currentLine + x + 2] = 0;
                     }
-                    else
+                    else 
                     {
-                        temp.SetPixel(x, y, white);
+                        pixels[currentLine + x] = 255;
+                        pixels[currentLine + x + 1] = 255;
+                        pixels[currentLine + x + 2] = 255;
                     }
                 }
             }
+
+            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
+            temp.UnlockBits(bitmapData);
+
             pictureBox2.Image = temp;
             threshold1.Value = value;
             TImage = temp;
@@ -251,25 +349,45 @@ namespace Rock__paper__scissors
             int T = Convert.ToInt32(threshold1.Value);
             Bitmap temp = (Bitmap)pic.Clone();
 
-            for (x = 0; x < temp.Width; x++)
+            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+            int byteCount = bitmapData.Stride * temp.Height;
+            byte[] pixels = new byte[byteCount];
+            IntPtr ptrFirstPixel = bitmapData.Scan0;
+            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
+            int heightInPixels = bitmapData.Height;
+            int widthInBytes = bitmapData.Width * bytesPerPixel;
+
+            for (y = 0; y < heightInPixels; y++)
             {
-                //Console.WriteLine();
-                for (y = 0; y < temp.Height; y++)
+                int currentLine = y * bitmapData.Stride;
+                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
-                    Color pixelColor = temp.GetPixel(x, y);
-                    Color black = Color.FromArgb(0, 0, 0);
-                    Color white = Color.FromArgb(255, 255, 255);
-                    //Console.Write(((pixelColor.R + pixelColor.G + pixelColor.B))/ 3 + " ");
-                    if (((pixelColor.R + pixelColor.G + pixelColor.B)) / 3 < T)
+                    //Color pixelColor = temp.GetPixel(x, y);
+                    //Color black = Color.FromArgb(0, 0, 0);
+                    //Color white = Color.FromArgb(255, 255, 255);
+
+                    int oldBlue = pixels[currentLine + x];
+                    int oldGreen = pixels[currentLine + x + 1];
+                    int oldRed = pixels[currentLine + x + 2];
+
+                    if (((oldRed + oldGreen + oldBlue)) / 3 < T)
                     {
-                        temp.SetPixel(x, y, black);
+                        pixels[currentLine + x] = 0;
+                        pixels[currentLine + x + 1] = 0;
+                        pixels[currentLine + x + 2] = 0;
                     }
                     else
                     {
-                        temp.SetPixel(x, y, white);
+                        pixels[currentLine + x] = 255;
+                        pixels[currentLine + x + 1] = 255;
+                        pixels[currentLine + x + 2] = 255;
                     }
                 }
             }
+
+            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
+            temp.UnlockBits(bitmapData);
             pictureBox2.Image = temp;
             TImage = temp;
             convexHull(temp);
@@ -398,6 +516,8 @@ namespace Rock__paper__scissors
         {
 
         }
+
+
     }
     public class Point
     {
