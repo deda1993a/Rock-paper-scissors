@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Rock__paper__scissors
 {
@@ -23,12 +24,12 @@ namespace Rock__paper__scissors
 
         private int talaltOllo = 0;
 
-         
-         
-         
-         
 
-         
+
+
+
+
+
 
         public Form1()
         {
@@ -39,33 +40,33 @@ namespace Rock__paper__scissors
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                                      
-                    
-                   
-                    label1.Text = "";
-                    OgImage = new Bitmap(openFileDialog1.FileName);
-                    GImage = new Bitmap(openFileDialog1.FileName);
-                    pictureBox1.Image = OgImage;
-
-                    Crop(OgImage);
-                    Crop(GImage);
-
-                    Frame(GImage);
-
-                    Grayscale(GImage);
-                    Threshold(GImage, 100);
 
 
 
-                    AutomaticThreshold(GImage, TImage, threshold1.Value);
-                   
-                    Check = new Bitmap(pictureBox2.Image);
-                    CheckImage(Check);
-                    Evaluate();
+                label1.Text = "";
+                OgImage = new Bitmap(openFileDialog1.FileName);
+                GImage = new Bitmap(openFileDialog1.FileName);
+                pictureBox1.Image = OgImage;
 
-                
+                Crop(OgImage);
+                Crop(GImage);
+
+                Frame(GImage);
+
+                Grayscale(GImage);
+                Threshold(GImage, 100);
+
+
+
+                AutomaticThreshold(GImage, TImage, threshold1.Value);
+
+                Check = new Bitmap(pictureBox2.Image);
+                CheckImage(Check);
+                Evaluate();
+
+
 
             }
         }
@@ -84,7 +85,7 @@ namespace Rock__paper__scissors
                 {
                     Console.WriteLine("Képszáma: " + szam);
                     double szazalek = (double)(talaltOllo * 100) / szam;
-                    Console.WriteLine("Olló találat százaléka: "+ Math.Round(szazalek, 2)+ "%");
+                    Console.WriteLine("Olló találat százaléka: " + Math.Round(szazalek, 2) + "%");
                     szam++;
                     label1.Text = "";
                     OgImage = new Bitmap(selected);
@@ -102,7 +103,7 @@ namespace Rock__paper__scissors
 
 
                     AutomaticThreshold(GImage, TImage, threshold1.Value);
-                  
+
                     Check = new Bitmap(pictureBox2.Image);
                     CheckImage(Check);
                     Evaluate();
@@ -114,12 +115,12 @@ namespace Rock__paper__scissors
 
         private void Evaluate()
         {
-            
+
             if (blackpercent > 33)
             {
                 label1.Text = "Olló";
                 talaltOllo++;
-                Console.WriteLine("Talált olló: "+talaltOllo);
+                Console.WriteLine("Talált olló: " + talaltOllo);
             }
         }
 
@@ -185,92 +186,90 @@ namespace Rock__paper__scissors
         private void AutomaticThreshold(Bitmap pic, Bitmap tpic, int fixval)
         {
             //Scan image for white pixel percentage
-            int x, y;
+            int x;
             Bitmap temp = (Bitmap)tpic.Clone();
             float whitePixels = 0;
             float blackPixels = 0;
             int fixValue = fixval;
 
-            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
-            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
-            int byteCount = bitmapData.Stride * temp.Height;
-            byte[] pixels = new byte[byteCount];
-            IntPtr ptrFirstPixel = bitmapData.Scan0;
-            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
-            int heightInPixels = bitmapData.Height;
-            int widthInBytes = bitmapData.Width * bytesPerPixel;
-
-            for ( y = 0; y < heightInPixels; y++)
+            unsafe
             {
-                int currentLine = y * bitmapData.Stride;
-                for ( x = 0; x < widthInBytes; x = x + bytesPerPixel)
+                BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+                int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+                int heightInPixels = bitmapData.Height;
+                int widthInBytes = bitmapData.Width * bytesPerPixel;
+                byte* PtrFirstPixel = (byte*)bitmapData.Scan0;
+
+                Parallel.For(0, heightInPixels, y =>
                 {
-
-                    int oldBlue = pixels[currentLine + x];
-                    int oldGreen = pixels[currentLine + x + 1];
-                    int oldRed = pixels[currentLine + x + 2];
-
-                    if (oldBlue==255 && oldGreen==255 && oldRed==255)
+                    byte* currentLine = PtrFirstPixel + (y * bitmapData.Stride);
+                    for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                     {
-                        whitePixels++;
+
+                        int oldBlue = currentLine[x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
+
+                        if (oldBlue == 255 && oldGreen == 255 && oldRed == 255)
+                        {
+                            whitePixels++;
+                        }
+                        else if (oldBlue == 0 && oldGreen == 0 && oldRed == 0)
+                        {
+                            blackPixels++;
+                        }
                     }
-                    else if (oldBlue == 0 && oldGreen == 0 && oldRed == 0)
-                    {
-                        blackPixels++;
-                    }
+                });
+                //Console.WriteLine("White pixels: " + whitePixels);
+                //Console.WriteLine("Black pixels: " + blackPixels);
+                Threshold(GImage, fixValue);
+                //Console.WriteLine("Fehér pixelek százaléka: " + whitePixels / (blackPixels + whitePixels) * 100);
+                if (whitePixels / (blackPixels + whitePixels) * 100 > 35)
+                {
+                    fixValue = fixValue + 10;
+                    AutomaticThreshold(OgImage, TImage, fixValue);
                 }
+                temp.UnlockBits(bitmapData);
             }
-            //Console.WriteLine("White pixels: " + whitePixels);
-            //Console.WriteLine("Black pixels: " + blackPixels);
-            Threshold(GImage, fixValue);
-            //Console.WriteLine("Fehér pixelek százaléka: " + whitePixels / (blackPixels + whitePixels) * 100);
-            if (whitePixels / (blackPixels + whitePixels) * 100 > 35)
-            {
-                fixValue=fixValue+10;
-                AutomaticThreshold(OgImage, TImage, fixValue);
-            }
-            temp.UnlockBits(bitmapData);
         }
 
         private void Grayscale(Bitmap pic)
         {
-
+            unsafe { 
             BitmapData bitmapData = pic.LockBits(new Rectangle(0, 0, pic.Width, pic.Height), ImageLockMode.ReadWrite, pic.PixelFormat);
-            int bytesPerPixel = Bitmap.GetPixelFormatSize(pic.PixelFormat) / 8;
-            int byteCount = bitmapData.Stride * pic.Height;
-            byte[] pixels = new byte[byteCount];
-            IntPtr ptrFirstPixel = bitmapData.Scan0;
-            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
+            int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(pic.PixelFormat) / 8;
             int heightInPixels = bitmapData.Height;
             int widthInBytes = bitmapData.Width * bytesPerPixel;
+            byte* PtrFirstPixel = (byte*)bitmapData.Scan0;
 
-            for (int y = 0; y < heightInPixels; y++)
-            {
-                int currentLine = y * bitmapData.Stride;
+                Parallel.For(0, heightInPixels, y =>
+                {
+                byte* currentLine = PtrFirstPixel + (y * bitmapData.Stride);
                 for (int x = 0; x < widthInBytes; x = x + bytesPerPixel)
                 {
-                    //Color pixelColor = temp.GetPixel(x, y);
-                    //Color black = Color.FromArgb(0, 0, 0);
-                    //Color white = Color.FromArgb(255, 255, 255);
+                        //Color pixelColor = temp.GetPixel(x, y);
+                        //Color black = Color.FromArgb(0, 0, 0);
+                        //Color white = Color.FromArgb(255, 255, 255);
 
-                    int oldBlue = pixels[currentLine + x];
-                    int oldGreen = pixels[currentLine + x + 1];
-                    int oldRed = pixels[currentLine + x + 2];
+                        int oldBlue = currentLine[x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
 
-                    int CValue = (oldRed + oldGreen + oldBlue) / 3;
+                        int CValue = (oldRed + oldGreen + oldBlue) / 3;
 
-                        pixels[currentLine + x] = (byte)CValue;
-                        pixels[currentLine + x + 1] = (byte)CValue;
-                        pixels[currentLine + x + 2] = (byte)CValue;
+                        currentLine[x] = (byte)CValue;
+                        currentLine[x + 1] = (byte)CValue;
+                        currentLine[x + 2] = (byte)CValue;
 
 
                 }
-            }
+            });
 
-            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
+
             pic.UnlockBits(bitmapData);
             pictureBox2.Image = pic;
         }
+    }
 
         private void Frame(Bitmap pic)
         {
@@ -296,48 +295,46 @@ namespace Rock__paper__scissors
 
             int T = value;
             Bitmap temp = (Bitmap)pic.Clone();
- 
-
-            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
-            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
-            int byteCount = bitmapData.Stride * temp.Height;
-            byte[] pixels = new byte[byteCount];
-            IntPtr ptrFirstPixel = bitmapData.Scan0;
-            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
-            int heightInPixels = bitmapData.Height;
-            int widthInBytes = bitmapData.Width * bytesPerPixel;
-
-            for (y = 0; y < heightInPixels; y++)
+            unsafe
             {
-                int currentLine = y * bitmapData.Stride;
-                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
+
+                BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+                int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+                int heightInPixels = bitmapData.Height;
+                int widthInBytes = bitmapData.Width * bytesPerPixel;
+                byte* PtrFirstPixel = (byte*)bitmapData.Scan0;
+
+                for (y = 0; y < heightInPixels; y++)
                 {
-                    //Color pixelColor = temp.GetPixel(x, y);
-                    //Color black = Color.FromArgb(0, 0, 0);
-                    //Color white = Color.FromArgb(255, 255, 255);
-
-                    int oldBlue = pixels[currentLine + x];
-                    int oldGreen = pixels[currentLine + x + 1];
-                    int oldRed = pixels[currentLine + x + 2];
-
-                    if (((oldRed + oldGreen + oldBlue)) / 3 < T)
+                    byte* currentLine = PtrFirstPixel + (y * bitmapData.Stride);
+                    for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                     {
-                        pixels[currentLine + x] = 0;
-                        pixels[currentLine + x + 1] = 0;
-                        pixels[currentLine + x + 2] = 0;
-                    }
-                    else 
-                    {
-                        pixels[currentLine + x] = 255;
-                        pixels[currentLine + x + 1] = 255;
-                        pixels[currentLine + x + 2] = 255;
+                        //Color pixelColor = temp.GetPixel(x, y);
+                        //Color black = Color.FromArgb(0, 0, 0);
+                        //Color white = Color.FromArgb(255, 255, 255);
+
+                        int oldBlue = currentLine[ x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
+
+                        if (((oldRed + oldGreen + oldBlue)) / 3 < T)
+                        {
+                            currentLine[x] = 0;
+                            currentLine[x + 1] = 0;
+                            currentLine[x + 2] = 0;
+                        }
+                        else
+                        {
+                            currentLine[x] = 255;
+                            currentLine[x + 1] = 255;
+                            currentLine[x + 2] = 255;
+                        }
                     }
                 }
+
+              
+                temp.UnlockBits(bitmapData);
             }
-
-            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
-            temp.UnlockBits(bitmapData);
-
             pictureBox2.Image = temp;
             threshold1.Value = value;
             TImage = temp;
@@ -346,50 +343,51 @@ namespace Rock__paper__scissors
 
         private void Threshold(Bitmap pic)
         {
-            int x, y;
+            int x;
 
             int T = Convert.ToInt32(threshold1.Value);
             Bitmap temp = (Bitmap)pic.Clone();
 
-            BitmapData bitmapData = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
-            int bytesPerPixel = Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
-            int byteCount = bitmapData.Stride * temp.Height;
-            byte[] pixels = new byte[byteCount];
-            IntPtr ptrFirstPixel = bitmapData.Scan0;
-            Marshal.Copy(ptrFirstPixel, pixels, 0, pixels.Length);
-            int heightInPixels = bitmapData.Height;
-            int widthInBytes = bitmapData.Width * bytesPerPixel;
-
-            for (y = 0; y < heightInPixels; y++)
+            unsafe
             {
-                int currentLine = y * bitmapData.Stride;
-                for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
+
+                BitmapData bitmapData2 = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height), ImageLockMode.ReadWrite, temp.PixelFormat);
+                int bytesPerPixel = System.Drawing.Bitmap.GetPixelFormatSize(temp.PixelFormat) / 8;
+                int heightInPixels = bitmapData2.Height;
+                int widthInBytes = bitmapData2.Width * bytesPerPixel;
+                byte* PtrFirstPixel = (byte*)bitmapData2.Scan0;
+
+                for (int y = 0; y < heightInPixels; y++)
                 {
-                    //Color pixelColor = temp.GetPixel(x, y);
-                    //Color black = Color.FromArgb(0, 0, 0);
-                    //Color white = Color.FromArgb(255, 255, 255);
-
-                    int oldBlue = pixels[currentLine + x];
-                    int oldGreen = pixels[currentLine + x + 1];
-                    int oldRed = pixels[currentLine + x + 2];
-
-                    if (((oldRed + oldGreen + oldBlue)) / 3 < T)
+                    byte* currentLine = PtrFirstPixel + (y * bitmapData2.Stride);
+                    for (x = 0; x < widthInBytes; x = x + bytesPerPixel)
                     {
-                        pixels[currentLine + x] = 0;
-                        pixels[currentLine + x + 1] = 0;
-                        pixels[currentLine + x + 2] = 0;
-                    }
-                    else
-                    {
-                        pixels[currentLine + x] = 255;
-                        pixels[currentLine + x + 1] = 255;
-                        pixels[currentLine + x + 2] = 255;
+                        //Color pixelColor = temp.GetPixel(x, y);
+                        //Color black = Color.FromArgb(0, 0, 0);
+                        //Color white = Color.FromArgb(255, 255, 255);
+
+                        int oldBlue = currentLine[x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
+
+                        if (((oldRed + oldGreen + oldBlue)) / 3 < T)
+                        {
+                            currentLine[x] = 0;
+                            currentLine[x + 1] = 0;
+                            currentLine[x + 2] = 0;
+                        }
+                        else
+                        {
+                            currentLine[x] = 255;
+                            currentLine[x + 1] = 255;
+                            currentLine[x + 2] = 255;
+                        }
                     }
                 }
-            }
 
-            Marshal.Copy(pixels, 0, ptrFirstPixel, pixels.Length);
-            temp.UnlockBits(bitmapData);
+               
+                temp.UnlockBits(bitmapData2);
+            }
             pictureBox2.Image = temp;
             TImage = temp;
             convexHull(temp);
