@@ -23,8 +23,12 @@ namespace Rock__paper__scissors
         Bitmap Check;
 
         private int talaltOllo = 0;
+        private int talaltKo = 0;
+        private int talaltPapir = 0;
+        private int HullCount = 0;
 
-
+        private int leghosszabb = 0;
+        private int MaxBlackLenght = 0;
 
 
 
@@ -43,7 +47,8 @@ namespace Rock__paper__scissors
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
 
-
+                leghosszabb = 0;
+                MaxBlackLenght = 0;
 
                 label1.Text = "";
                 OgImage = new Bitmap(openFileDialog1.FileName);
@@ -65,7 +70,7 @@ namespace Rock__paper__scissors
                 Check = new Bitmap(pictureBox2.Image);
                 CheckImage(Check);
                 Evaluate();
-
+                pictureBox3.Image.Save("out.bmp");
 
 
             }
@@ -75,7 +80,7 @@ namespace Rock__paper__scissors
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-
+                
                 //openFileDialog1.InitialDirectory = folderBrowserDialog1.SelectedPath;
 
                 string[] dirs = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
@@ -83,9 +88,14 @@ namespace Rock__paper__scissors
 
                 foreach (string selected in dirs)
                 {
+                    MaxBlackLenght = 0;
                     Console.WriteLine("Képszáma: " + szam);
-                    double szazalek = (double)(talaltOllo * 100) / szam;
-                    Console.WriteLine("Olló találat százaléka: " + Math.Round(szazalek, 2) + "%");
+                    double olloSzazalek = (double)(talaltOllo * 100) / szam;
+                    Console.WriteLine("Olló találat százaléka: " + Math.Round(olloSzazalek, 2) + "%");
+                    double koSzazalek = (double)(talaltKo * 100) / szam;
+                    Console.WriteLine("Kő találat százaléka: " + Math.Round(koSzazalek, 2) + "%");
+                    double papirSzazalek = (double)(talaltPapir * 100) / szam;
+                    Console.WriteLine("Papír találat százaléka: " + Math.Round(papirSzazalek, 2) + "%");
                     szam++;
                     label1.Text = "";
                     OgImage = new Bitmap(selected);
@@ -116,62 +126,215 @@ namespace Rock__paper__scissors
         private void Evaluate()
         {
 
-            if (blackpercent > 33)
+            int weight = 0;
+
+            if (52 < MaxBlackLenght )
+            {
+                label1.Text = "Papír";
+                talaltPapir++;
+                Console.WriteLine("Talált papír: " + talaltPapir);
+            }
+
+              if (50 > MaxBlackLenght )
+            {
+                label1.Text = "Kő";
+                talaltKo++;
+                Console.WriteLine("Talált kő: " + talaltKo);
+            }
+
+              if (20 < blackpercent)
             {
                 label1.Text = "Olló";
                 talaltOllo++;
                 Console.WriteLine("Talált olló: " + talaltOllo);
             }
+
+            Console.WriteLine("Maximalis tav: "+MaxBlackLenght);
+            if (leghosszabb < 178)
+                        {
+                            weight -= 10;
+                        }
+
+                        if (blackpercent < 14)
+                        {
+                            weight -= 10;
+                        }
+
+
+           /* if (leghosszabb > 179)
+                        {
+                            weight += 10;
+                        }
+
+                        if ((blackpercent > 14))
+                        {
+                            weight += 10;
+                        }
+
+
+                        if (weight<10)
+                        {
+                            label1.Text = "Kő";
+                            talaltKo++;
+                            Console.WriteLine("Talált kő: " + talaltKo);
+                            Console.WriteLine("Weight: "+weight);
+                        }
+
+                         if ( weight>=10)
+                        {
+                            Console.WriteLine("Weight: " + weight);
+                            label1.Text = "Olló";
+                            talaltOllo++;
+                            Console.WriteLine("Talált olló: " + talaltOllo);
+                        }*/
+
+
         }
 
         private double whitepercent;
         private double blackpercent;
+        private int elso;
+        private int utolso;
+        private int FirstWhite;
+        
         private void CheckImage(Bitmap G)
         {
+            leghosszabb = 0;
             Color R = Color.FromArgb(255, 0, 0);
             Color B = Color.FromArgb(0, 0, 0);
             Color W = Color.FromArgb(255, 255, 255);
             int countblack = 0;
             int countwhite = 0;
+            int BlackLenght=0;
 
-            try
+
+            for (int j = 0; j < G.Height; j++)
             {
+                int hossz = 0;
+                
                 for (int i = 0; i < G.Width; i++)
                 {
-                    for (int j = 0; j < G.Height; j++)
+                    if (G.GetPixel(i, j) == R)
                     {
-                        if (G.GetPixel(i, j) == R)
+                        int foundred = 0;
+                        
+                        
+                        for (int z = i; z < G.Width - 20; z++)
                         {
-                            for (int z = i + 2; z < G.Height; z++)
+
+                            // Console.WriteLine("z: " + z);
+                            //countblack++;
+
+
+
+
+
+                            if (G.GetPixel(z, j) == R)
                             {
-                                //countblack++;
-                                if (G.GetPixel(z, j) == W)
+                                foundred++;
+                                if (foundred == 1)
                                 {
-                                    countwhite++;
+                                    elso = z;
                                 }
+                                // Console.WriteLine("Piros: "+foundred);
 
-                                else
+                                utolso = z;
+                               
+                                // Console.WriteLine("Z ertek: " + z);
+                            }
+
+
+
+
+                        }
+                        // Console.WriteLine("elso: " + elso + "utolso: " + utolso);
+                        if (utolso > 200)
+                        {
+                            utolso = 200;
+                        }
+                        int foundwhite = 0;
+                        for (int k = elso; k < utolso; k++)
+                        {
+                            if (G.GetPixel(k, j) == W)
+                            {
+                                //Console.WriteLine("z: "+z+"j: "+j);
+                                countwhite++;
+                                hossz ++;
+                                
+                            }
+
+                            else if (G.GetPixel(k, j) == B)
+                            {
+                                if (hossz > leghosszabb)
                                 {
-                                    countblack++;
+                                    
+                                    leghosszabb = hossz;
+                                    //Console.WriteLine("Utolso hossz: "+k+", "+j);
+                                    
                                 }
+                                hossz = 0;
+                                countblack++;
+                                
 
-                                if (G.GetPixel(z, j) == R)
+                            }
+
+                            if (G.GetPixel(k, j) == W)
+                            {
+                                foundwhite++;
+
+                                if (foundwhite == 0 && k == 199 )
                                 {
-                                    break;
+                                   // Console.WriteLine("helyes");
+                                    BlackLenght = 0;
+                                    
+                                    //break;
+                                }
+                                else if (foundwhite == 1 )
+                                {
+                                    FirstWhite = k;
+                                    BlackLenght = FirstWhite - elso;
+                                   for(int d = elso; d < FirstWhite; d++)
+                                    {
+                                        //Console.WriteLine("d:"+d);
+                                        G.SetPixel(d, j, Color.Blue);
+                                    }
+                                    //Console.WriteLine("Koordinatak: "+k+", "+j);
+                                }
+                                // Console.WriteLine("Blacklenght: " + BlackLenght);
+                                
+
+                            }else if(foundwhite==0 && k == 199)
+                            {
+                                BlackLenght = 200 - elso;
+                                for (int d = elso; d < 199; d++)
+                                {
+                                    //Console.WriteLine("d:" + d);
+                                    G.SetPixel(d, j, Color.Blue);
                                 }
                             }
+
+                            
+                            if (BlackLenght > MaxBlackLenght)
+                            {
+                                MaxBlackLenght = BlackLenght;
+
+                            }
+                            //Console.WriteLine(" Tav: " + BlackLenght + "Koordinatak: " + k + ", " + j);
                         }
+
                     }
+                   
                 }
             }
-            catch
-            {
+    
+           // Console.WriteLine("Leghosszabb: "+ leghosszabb);
 
-            }
+            pictureBox3.Image = G;
             whitepercent = (double)countwhite / (countblack + countwhite) * 100;
             blackpercent = (double)countblack / (countblack + countwhite) * 100;
             Console.WriteLine("Black percent: " + blackpercent);
             Console.WriteLine("White percent: " + whitepercent);
+            //Console.WriteLine("White pixel: " + countwhite);
         }
         private void Crop(Bitmap b)
         {
@@ -494,7 +657,7 @@ namespace Rock__paper__scissors
             Console.WriteLine("-----------------");
             Console.WriteLine();*/
 
-            Pen redPen = new Pen(Color.Red, 3);
+            Pen redPen = new Pen(Color.Red, 1);
 
             for (int i = 1; i < hullpoints; i++)
             {
@@ -509,6 +672,8 @@ namespace Rock__paper__scissors
             }
 
             pictureBox2.Image = temp;
+            HullCount = hull.Count;
+            Console.WriteLine("Hullok szama: "+hull.Count);
 
         }
 

@@ -1,0 +1,40 @@
+
+
+2021.12.08
+
+Papírnál:
+Talált papír: 0
+Képszáma: 712
+Olló találat százaléka: 75,14%
+Kő találat százaléka: 23,6%
+Papír találat százaléka: 0%
+
+Kőnél:
+Talált kő: 584
+Képszáma: 726
+Kő találat százaléka: 80,3%
+
+Olló:
+Talált olló: 407
+Képszáma: 750
+Olló találat százaléka: 54,13%
+
+Ko
+if(leghosszab<178){
+	weight-=10;
+}
+
+if(blackpercent<14){
+	weigh+=10;
+}
+
+Ollo
+if ( leghosszabb>179)
+{
+	weight+=10;
+}
+
+if ( (blackpercent>14))
+{
+	weight+=10;
+}
