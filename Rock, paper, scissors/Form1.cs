@@ -26,6 +26,7 @@ namespace Rock__paper__scissors
         private int talaltKo = 0;
         private int talaltPapir = 0;
         private int HullCount = 0;
+        //private int InnerLine=0;
 
         private int leghosszabb = 0;
         private int MaxBlackLenght = 0;
@@ -49,6 +50,7 @@ namespace Rock__paper__scissors
 
                 leghosszabb = 0;
                 MaxBlackLenght = 0;
+                //InnerLine = 0;
 
                 label1.Text = "";
                 OgImage = new Bitmap(openFileDialog1.FileName);
@@ -85,6 +87,7 @@ namespace Rock__paper__scissors
 
                 string[] dirs = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
                 int szam = 1;
+               // InnerLine = 0;
 
                 foreach (string selected in dirs)
                 {
@@ -126,67 +129,31 @@ namespace Rock__paper__scissors
         private void Evaluate()
         {
 
-            int weight = 0;
 
-            if (52 < MaxBlackLenght )
-            {
-                label1.Text = "Papír";
-                talaltPapir++;
-                Console.WriteLine("Talált papír: " + talaltPapir);
-            }
 
-              if (50 > MaxBlackLenght )
-            {
-                label1.Text = "Kő";
-                talaltKo++;
-                Console.WriteLine("Talált kő: " + talaltKo);
-            }
-
-              if (20 < blackpercent)
+            if (99 < MaxBlackLenght || blackpercent>40)
             {
                 label1.Text = "Olló";
                 talaltOllo++;
                 Console.WriteLine("Talált olló: " + talaltOllo);
             }
 
-            Console.WriteLine("Maximalis tav: "+MaxBlackLenght);
-            if (leghosszabb < 178)
-                        {
-                            weight -= 10;
-                        }
+            else if (52 < MaxBlackLenght && 99 > MaxBlackLenght || blackpercent < 40 && 20<blackpercent)
+            {
+                label1.Text = "Papír";
+                talaltPapir++;
+                Console.WriteLine("Talált papír: " + talaltPapir);
+            }
 
-                        if (blackpercent < 14)
-                        {
-                            weight -= 10;
-                        }
-
-
-           /* if (leghosszabb > 179)
-                        {
-                            weight += 10;
-                        }
-
-                        if ((blackpercent > 14))
-                        {
-                            weight += 10;
-                        }
+            else if (50 > MaxBlackLenght || 20 > blackpercent && blackpercent > 0)
+            {
+                label1.Text = "Kő";
+                talaltKo++;
+                Console.WriteLine("Talált kő: " + talaltKo);
+            }
 
 
-                        if (weight<10)
-                        {
-                            label1.Text = "Kő";
-                            talaltKo++;
-                            Console.WriteLine("Talált kő: " + talaltKo);
-                            Console.WriteLine("Weight: "+weight);
-                        }
 
-                         if ( weight>=10)
-                        {
-                            Console.WriteLine("Weight: " + weight);
-                            label1.Text = "Olló";
-                            talaltOllo++;
-                            Console.WriteLine("Talált olló: " + talaltOllo);
-                        }*/
 
 
         }
@@ -218,7 +185,7 @@ namespace Rock__paper__scissors
                     {
                         int foundred = 0;
                         
-                        
+
                         for (int z = i; z < G.Width - 20; z++)
                         {
 
@@ -231,9 +198,11 @@ namespace Rock__paper__scissors
 
                             if (G.GetPixel(z, j) == R)
                             {
+                                
                                 foundred++;
                                 if (foundred == 1)
                                 {
+                                    
                                     elso = z;
                                 }
                                 // Console.WriteLine("Piros: "+foundred);
@@ -252,9 +221,11 @@ namespace Rock__paper__scissors
                         {
                             utolso = 200;
                         }
+                        
                         int foundwhite = 0;
                         for (int k = elso; k < utolso; k++)
                         {
+                            
                             if (G.GetPixel(k, j) == W)
                             {
                                 //Console.WriteLine("z: "+z+"j: "+j);
@@ -282,14 +253,7 @@ namespace Rock__paper__scissors
                             {
                                 foundwhite++;
 
-                                if (foundwhite == 0 && k == 199 )
-                                {
-                                   // Console.WriteLine("helyes");
-                                    BlackLenght = 0;
-                                    
-                                    //break;
-                                }
-                                else if (foundwhite == 1 )
+                                 if (foundwhite == 1 )
                                 {
                                     FirstWhite = k;
                                     BlackLenght = FirstWhite - elso;
@@ -319,7 +283,8 @@ namespace Rock__paper__scissors
                                 MaxBlackLenght = BlackLenght;
 
                             }
-                            //Console.WriteLine(" Tav: " + BlackLenght + "Koordinatak: " + k + ", " + j);
+                        
+                            //Console.WriteLine(" Tav: " + InnerLine + "Koordinatak: " + k + ", " + j);
                         }
 
                     }
