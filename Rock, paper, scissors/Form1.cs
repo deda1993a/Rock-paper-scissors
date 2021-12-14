@@ -26,13 +26,10 @@ namespace Rock__paper__scissors
         private int talaltKo = 0;
         private int talaltPapir = 0;
         private int HullCount = 0;
-        //private int InnerLine=0;
+
 
         private int leghosszabb = 0;
         private int MaxBlackLenght = 0;
-
-
-
 
 
 
@@ -50,8 +47,7 @@ namespace Rock__paper__scissors
 
                 leghosszabb = 0;
                 MaxBlackLenght = 0;
-                //InnerLine = 0;
-
+              
                 label1.Text = "";
                 OgImage = new Bitmap(openFileDialog1.FileName);
                 GImage = new Bitmap(openFileDialog1.FileName);
@@ -72,33 +68,34 @@ namespace Rock__paper__scissors
                 Check = new Bitmap(pictureBox2.Image);
                 CheckImage(Check);
                 Evaluate();
-                pictureBox3.Image.Save("out.bmp");
+                //pictureBox2.Image.Save("out.bmp");
 
-
+               
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-            {
-                
-                //openFileDialog1.InitialDirectory = folderBrowserDialog1.SelectedPath;
-
+            {                             
                 string[] dirs = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
                 int szam = 1;
-               // InnerLine = 0;
+           
 
                 foreach (string selected in dirs)
                 {
                     MaxBlackLenght = 0;
                     Console.WriteLine("Képszáma: " + szam);
+                    label5.Text = "Képszáma: " + szam;
                     double olloSzazalek = (double)(talaltOllo * 100) / szam;
                     Console.WriteLine("Olló találat százaléka: " + Math.Round(olloSzazalek, 2) + "%");
+                    label2.Text = "Olló: " + Math.Round(olloSzazalek, 2) + "%";
                     double koSzazalek = (double)(talaltKo * 100) / szam;
                     Console.WriteLine("Kő találat százaléka: " + Math.Round(koSzazalek, 2) + "%");
+                    label3.Text = "Kő: " + Math.Round(koSzazalek, 2) + "%";
                     double papirSzazalek = (double)(talaltPapir * 100) / szam;
                     Console.WriteLine("Papír találat százaléka: " + Math.Round(papirSzazalek, 2) + "%");
+                    label4.Text = "Papír: " + Math.Round(papirSzazalek, 2) + "%";
                     szam++;
                     label1.Text = "";
                     OgImage = new Bitmap(selected);
@@ -129,23 +126,22 @@ namespace Rock__paper__scissors
         private void Evaluate()
         {
 
-
-
-            if (99 < MaxBlackLenght || blackpercent>40)
+            if (99 < MaxBlackLenght || blackpercent > 40)
             {
                 label1.Text = "Olló";
                 talaltOllo++;
                 Console.WriteLine("Talált olló: " + talaltOllo);
+                
             }
 
-            else if (52 < MaxBlackLenght && 99 > MaxBlackLenght || blackpercent < 40 && 20<blackpercent)
+            else if ((52 < MaxBlackLenght && 99 > MaxBlackLenght) || (blackpercent < 40 && 20 < blackpercent) )
             {
                 label1.Text = "Papír";
                 talaltPapir++;
                 Console.WriteLine("Talált papír: " + talaltPapir);
             }
 
-            else if (50 > MaxBlackLenght || 20 > blackpercent && blackpercent > 0)
+            else if (50 > MaxBlackLenght || (20 > blackpercent && blackpercent > 0))
             {
                 label1.Text = "Kő";
                 talaltKo++;
@@ -153,8 +149,7 @@ namespace Rock__paper__scissors
             }
 
 
-
-
+            Console.WriteLine("Maximalis tav: "+MaxBlackLenght);
 
         }
 
@@ -188,35 +183,18 @@ namespace Rock__paper__scissors
 
                         for (int z = i; z < G.Width - 20; z++)
                         {
-
-                            // Console.WriteLine("z: " + z);
-                            //countblack++;
-
-
-
-
-
                             if (G.GetPixel(z, j) == R)
-                            {
-                                
+                            {                               
                                 foundred++;
                                 if (foundred == 1)
-                                {
-                                    
+                                {                                   
                                     elso = z;
-                                }
-                                // Console.WriteLine("Piros: "+foundred);
-
-                                utolso = z;
-                               
-                                // Console.WriteLine("Z ertek: " + z);
+                                }                              
+                                utolso = z;                              
                             }
 
-
-
-
                         }
-                        // Console.WriteLine("elso: " + elso + "utolso: " + utolso);
+               
                         if (utolso > 200)
                         {
                             utolso = 200;
@@ -224,29 +202,21 @@ namespace Rock__paper__scissors
                         
                         int foundwhite = 0;
                         for (int k = elso; k < utolso; k++)
-                        {
-                            
+                        {                            
                             if (G.GetPixel(k, j) == W)
-                            {
-                                //Console.WriteLine("z: "+z+"j: "+j);
+                            {                              
                                 countwhite++;
-                                hossz ++;
-                                
+                                hossz ++;                                
                             }
 
                             else if (G.GetPixel(k, j) == B)
                             {
                                 if (hossz > leghosszabb)
-                                {
-                                    
-                                    leghosszabb = hossz;
-                                    //Console.WriteLine("Utolso hossz: "+k+", "+j);
-                                    
+                                {                                   
+                                    leghosszabb = hossz;                                                                   
                                 }
                                 hossz = 0;
-                                countblack++;
-                                
-
+                                countblack++;                               
                             }
 
                             if (G.GetPixel(k, j) == W)
@@ -259,14 +229,11 @@ namespace Rock__paper__scissors
                                     BlackLenght = FirstWhite - elso;
                                    for(int d = elso; d < FirstWhite; d++)
                                     {
-                                        //Console.WriteLine("d:"+d);
+                                        
                                         G.SetPixel(d, j, Color.Blue);
                                     }
-                                    //Console.WriteLine("Koordinatak: "+k+", "+j);
-                                }
-                                // Console.WriteLine("Blacklenght: " + BlackLenght);
-                                
-
+                                  
+                                }                                                           
                             }else if(foundwhite==0 && k == 199)
                             {
                                 BlackLenght = 200 - elso;
@@ -282,24 +249,18 @@ namespace Rock__paper__scissors
                             {
                                 MaxBlackLenght = BlackLenght;
 
-                            }
-                        
-                            //Console.WriteLine(" Tav: " + InnerLine + "Koordinatak: " + k + ", " + j);
+                            }                                                
                         }
 
                     }
                    
                 }
             }
-    
-           // Console.WriteLine("Leghosszabb: "+ leghosszabb);
-
-            pictureBox3.Image = G;
+             
             whitepercent = (double)countwhite / (countblack + countwhite) * 100;
             blackpercent = (double)countblack / (countblack + countwhite) * 100;
             Console.WriteLine("Black percent: " + blackpercent);
             Console.WriteLine("White percent: " + whitepercent);
-            //Console.WriteLine("White pixel: " + countwhite);
         }
         private void Crop(Bitmap b)
         {
@@ -531,8 +492,8 @@ namespace Rock__paper__scissors
             int val = (q.y - p.y) * (r.x - q.x) -
                     (q.x - p.x) * (r.y - q.y);
 
-            if (val == 0) return 0; // collinear
-            return (val > 0) ? 1 : 2; // clock or counterclock wise
+            if (val == 0) return 0; 
+            return (val > 0) ? 1 : 2; // irány kiválasztása
         }
             public void convexHull(Bitmap pic)
             {
@@ -563,13 +524,13 @@ namespace Rock__paper__scissors
                 }
             }
             int hullpoints = 0;
-            // There must be at least 3 points
+            // Legalább 3 pontnak kell lenni.
             if (n < 3) return;
 
-                // Initialize Result
+                // Lista létrehozása
                 List<Point> hull = new List<Point>();
 
-                // Find the leftmost point
+                // A leginkább ballra lévő pont kiválasztása
                 int l = 0;
             for (int i = 1; i < n; i++)
             {
@@ -577,43 +538,34 @@ namespace Rock__paper__scissors
                     l = i;
             }
 
-                // Start from leftmost point, keep moving
-                // counterclockwise until reach the start point
-                // again. This loop runs O(h) times where h is
-                // number of points in result or output.
+                // A bal pontból indul ki
+                // óramutatóval szemben
+
                 int p = l, q;
                 do
                 {
-                    // Add current point to result
+                    // A pontokat az eredménybe rakja
                     hull.Add(points[p]);
                 hullpoints++;
 
-                    // Search for a point 'q' such that
-                    // orientation(p, q, x) is counterclockwise
-                    // for all points 'x'. The idea is to keep
-                    // track of last visited most counterclock-
-                    // wise point in q. If any point 'i' is more
-                    // counterclock-wise than q, then update q.
+
+                    // Pontok keresése
                     q = (p + 1) % n;
 
                     for (int i = 0; i < n; i++)
                     {
-                        // If i is more counterclockwise than
-                        // current q, then update q
+
                         if (orientation(points[p], points[i], points[q])
                                                             == 2)
                             q = i;
                     }
 
-                    // Now q is the most counterclockwise with
-                    // respect to p. Set p as q for next iteration,
-                    // so that q is added to result 'hull'
+
                     p = q;
 
-                } while (p != l); // While we don't come to first
-                                  // point
+                } while (p != l); 
+                                 
 
-                // Print Result
                 /*foreach (Point tempp in hull)
                     Console.WriteLine("(" + tempp.x + ", " +
                                         tempp.y + ")");
