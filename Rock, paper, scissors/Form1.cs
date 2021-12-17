@@ -14,7 +14,9 @@ using System.Threading.Tasks;
 
 namespace Rock__paper__scissors
 {
-
+    /*
+     Készítette: Demeter Dávid, Donovan Dávid, Esek Nicolas
+     */
     public partial class Form1 : Form
     {
         Bitmap OgImage;
@@ -68,9 +70,8 @@ namespace Rock__paper__scissors
                 Check = new Bitmap(pictureBox2.Image);
                 CheckImage(Check);
                 Evaluate();
-                //pictureBox2.Image.Save("out.bmp");
+                //TImage.Save("out.bmp");
 
-               
             }
         }
 
@@ -611,3 +612,9 @@ namespace Rock__paper__scissors
         }
     }
 }
+
+/*
+ Források:
+     https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
+     http://csharpexamples.com/fast-image-processing-c/
+ */
